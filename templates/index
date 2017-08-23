@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>index</title>
+         <style>
+           .center {
+            width: 200px; /* Ширина элемента в пикселах */
+            padding: 10px; /* Поля вокруг текста */
+            margin: auto; /* Выравниваем по центру */
+            /*background: #fc0; /* Цвет фона */
+           }
+        </style>
+    </head>
+<body>
+    <form method="get" action="index">
+    <div class="center">
+        <p>            
+            <input name="medicament" placeholder="Название препарата" type="text"/>
+        </p>  
+        <p>
+            <input type="submit" value="Отправить">
+        </p>
+        <img src="/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/view_html.jpg" alt="альтернативный текст">
+    </div>
+   </form>
+</body>
+</html>
+

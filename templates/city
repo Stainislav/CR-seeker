@@ -10,7 +10,7 @@
             <a href="/">Главная</a>
         </p>
         <!--id="city"-->  
-		%(row)s         
+		         
     </body>
 </html>
 

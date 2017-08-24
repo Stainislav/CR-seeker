@@ -3,7 +3,7 @@
 
 from cgi import parse_qs, escape
 
-from functions import index #get_clinical_research
+from functions import index, get_clinical_research
 
 def application(environ, start_response):
     
@@ -18,9 +18,9 @@ def application(environ, start_response):
        
     if path == '/':
         response_body = index()
-
-    #if path == '/index?medicament':
-    #    response_body = get_clinical_research()
+               
+    if path == '/index':
+        response_body = get_clinical_research()
     
     status = '200 OK'
 
@@ -30,6 +30,5 @@ def application(environ, start_response):
     ]
 
     start_response(status, headers)
-
-    return [response_body]
+    return [response_body.encode("utf-8")]
 

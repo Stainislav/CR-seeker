@@ -13,6 +13,7 @@ def application(environ, start_response):
     region = dictionary.get('region', [''])[0]
     clicked_id = dictionary.get('clicked_id', [''])[0]
     comments_to_delete = dictionary.get('comments_to_delete', [''])[0]     
+    medicament = dictionary.get('medicament',[''])[0]
 
     response_body =''
        
@@ -20,7 +21,7 @@ def application(environ, start_response):
         response_body = index()
                
     if path == '/index':
-        response_body = get_clinical_research()
+        response_body = get_clinical_research(medicament)
     
     status = '200 OK'
 

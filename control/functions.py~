@@ -10,6 +10,9 @@ import lxml.html as html
 from pandas import DataFrame
 import re
 
+import urllib.request
+from bs4 import BeautifulSoup
+
 from io import StringIO
 from lxml import etree
 
@@ -24,7 +27,25 @@ def index():
     
     body = render("index", mapping)
     return body
+'''
+def get_html(url):
+    response = urllib.request.urlopen(url)
+    return response.read()
 
+def parse(html):
+    soup = BeautifulSoup(html)
+    table = soup.find('table', class='items_list')
+
+    for row in table.find_all('tr')[1:]
+        cols = row.find_all('td')
+        print (cols)
+
+def main():
+    parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
+'''
+#def get_active_substance():
+
+#def is_homeopathy():
 
 def get_clinical_research(medicament):
     page = html.parse(urlopen('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
@@ -55,133 +76,10 @@ def get_clinical_research(medicament):
     for e in tree.iter():
         d = {'key': e.text, 'value': e.attrib.get("href")} 
         children.append(d)
-
-    for i in children:
-        if medicament.upper() == str(i['key']).upper():
-            link_togo = i['value']
     
-    link_togo = "https:" + link_togo
-
-    page = html.parse(urlopen(link_togo)) 
-    root = page.getroot()
-    tree = etree.ElementTree(root)
-
-    drug = page.getroot().\
-        find_class("drug__link drug__link--article")
-    
-    drug_list = []
-
-    # Create a dictionary of links and alphabet letters.
-    for i in drug:   
-        drug_list.append(i.text_content())
-
-    answer = ''
-
-    # Check for homeopathy.
-    for i in drug_list:
-        result = re.findall(r'ГОМЕОПАТИЧЕСКОЕ', i.upper())
-        if result != None:
-            answer = "Это гомеопатическое средство.. "
-
-    # get the id attributes from the page
-    children = []
-    for e in tree.iter():
-        d = {'key': e.text, 'value': e.attrib.get("id")} 
-        children.append(d)
-       
     mapping = {
-            'page': answer
+            'page': children
         }
    
-    #<div class="alphabet__raspor" id="c0e1"></div>
-    #<div id="dejstvuyushhee-veshhestvo"></div>
-    #<div id="farmakologicheskaya-gruppa"></div>
     body = render("view", mapping)
     return body
-'''
-
-
-    #'tn_alf_list'
-    e = page.getroot().\
-        find_class('alphabet__delimiter')
-
-    # Create a dictionary of links.
-    for i in e:
-        d = {'key': i.text_content(), 'value': i.attrib.get("href")}
-        links.append(d)
-
-    # Find a link for transition.
-    for i in links:
-        #print(medicament.upper())
-        if medicament.upper() == i['key'].upper():
-            link_togo = i['value']
-
-
-
-
-
-
-print(link_togo)
-    page = html.parse(urlopen(link_togo))  
- 
-    #'tn_alf_list'
-    e = page.getroot().\
-        find_class('tn_alf_list')
-
-    # Create a dictionary of links.
-    for i in e:   
-        d = {'key': i.text_content(), 'value': i.attrib.get("href")}
-        links.append(d)
-    
-    med = medicament.upper()
-    print(med)
-    # Find a link for transition.
-    for i in links:
-        if medicament.upper() == i['key'].upper():
-            link_togo = i['value']
-    print(link_togo)
-
-
-
-broken_html = "https://www.rlsnet.ru/tn_alf_letter_c0.htm"
-
-    parser = etree.HTMLParser()
-    tree   = etree.parse(StringIO(broken_html), parser)
-
-    page = etree.tostring(tree.getroot(),
-                            pretty_print=True, method="html")
-
- #myString = "https://www.rlsnet.ru/tn_alf_letter_c0.htm"
-    #page = etree.parse(StringIO(myString))
-#"<html><head><title>test<body><h1>page title</h3>"
-'''
-'''
-    e = page.getroot().\
-        find_class('search__alphabet').\
-        pop()
-
-
-
-    url_list = ''
-
-    for i in e:
-        url_list = url_list + i
-    print(url_list)
-
-    #page = page.getroot()
-    #page = page.text_content()
-    
-    #t = e.getchildren().pop()
-    #t = t.text_content()
-    
-    alphabet = ''
-       
-    for i in e:
-        alphabet =  alphabet + i.text_content()
-   
-    mapping = {
-            'page': alphabet
-        }
-
-    #"html/aironepage/HTML/index.html"
-  '''

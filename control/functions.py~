@@ -27,27 +27,32 @@ def index():
     
     body = render("index", mapping)
     return body
-'''
+
 def get_html(url):
     response = urllib.request.urlopen(url)
     return response.read()
 
 def parse(html):
-    soup = BeautifulSoup(html)
-    table = soup.find('table', class='items_list')
-
-    for row in table.find_all('tr')[1:]
-        cols = row.find_all('td')
-        print (cols)
-
-def main():
-    parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
-'''
+    soup = BeautifulSoup(html, "html.parser")
+    # 'search_filter' 'j-body body--decreased' 'alphabet_current'
+    div = soup.find('div', class_='alphabet__current')    
+    
+    for d in div.find_all('a'):
+        print(d)    
+    
+    #for row in table.find_all('tr')[1:]:
+     #   cols = row.find_all('td')
+      #  print (cols)
+ 
 #def get_active_substance():
 
 #def is_homeopathy():
 
 def get_clinical_research(medicament):
+    the_html = parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
+    #print(the_html)
+    #parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
+
     page = html.parse(urlopen('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
 
     e = page.getroot().\
@@ -78,7 +83,7 @@ def get_clinical_research(medicament):
         children.append(d)
     
     mapping = {
-            'page': children
+            'page': the_html #children
         }
    
     body = render("view", mapping)

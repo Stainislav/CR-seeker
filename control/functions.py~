@@ -24,7 +24,6 @@ db = connection.cursor()
 
 def index():
     mapping = {}
-    
     body = render("index", mapping)
     return body
 
@@ -34,25 +33,30 @@ def get_html(url):
 
 def parse(html):
     soup = BeautifulSoup(html, "html.parser")
-    # 'search_filter' 'j-body body--decreased' 'alphabet_current'
     div = soup.find('div', class_='alphabet__current')    
     
-    for d in div.find_all('a'):
-        print(d)    
+    links = []
     
-    #for row in table.find_all('tr')[1:]:
-     #   cols = row.find_all('td')
-      #  print (cols)
- 
+
+    for d in div.find_all('a')[0:29]:
+        for a in d:        
+            print(a)
+
+    # Create a dictionary of links and alphabet letters.
+    for i in div.find_all('a')[0:29]:
+        d = {'key': i.text, 'value': i['href']}
+        links.append(d) 
+
+    for i in links:
+        print(i)
+    
 #def get_active_substance():
 
 #def is_homeopathy():
 
 def get_clinical_research(medicament):
     the_html = parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
-    #print(the_html)
-    #parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
-
+    
     page = html.parse(urlopen('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
 
     e = page.getroot().\

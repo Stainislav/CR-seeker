@@ -31,6 +31,13 @@ def get_html(url):
     response = urllib.request.urlopen(url)
     return response.read()
 
+def choose_medicament(medicament_list):
+    mapping = {
+        'page': medicament_list
+    }
+    body = render("choice", mapping)
+    return body
+
 def parse(html):
     soup = BeautifulSoup(html, "html.parser")
     div = soup.find('div', class_='alphabet__current')    
@@ -43,10 +50,31 @@ def parse(html):
         links.append(d) 
 
     return links
-    
-#def get_active_substance():
 
-#def is_homeopathy():
+def parse_pharm_group(html):
+    #soup = BeautifulSoup(html, "html.parser")
+    #pharm_group = soup.find('какой-то тег')
+    #return pharm_group
+    pass
+
+def get_active_substance():
+    pass
+
+def is_homeopathy():
+    pass
+
+def parse_medicament(html):
+    soup = BeautifulSoup(html, "html.parser")
+    medicament = soup.find('div', class_='tn_alf_list')
+
+    links = []
+
+    # Create a dictionary of links and alphabet letters.
+    for i in medicament.find_all('a'):
+        d = {'key': i.text, 'value': i['href']}
+        links.append(d) 
+    
+    return links
 
 def get_clinical_research(medicament):
     alphabet_list = parse(get_html('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
@@ -56,10 +84,52 @@ def get_clinical_research(medicament):
     # Find a link for transition to the page with particular letter.
     for i in alphabet_list:
         if medicament[0].upper() == i['key']:
-            link_togo = i['value']
+            link_togo = i['value']    
      
     link_togo = "https:" + link_togo
+
+    medicament_html = get_html(link_togo)
+
+    medicament_list = parse_medicament(medicament_html)
+
+    medicament_link = []
+
+    for i in medicament_list:
+        result = re.findall(medicament.upper(), i['key'].upper())
+        if result:
+            medicament_link.append(i['value'])
     
+    if len(medicament_link) > 1:
+        body = choose_medicament(medicament_link)
+        return body       
+    
+    # Далее переходим на страницу препарата и парсим уже её по фарм-группе, затем по странице и действующему веществу
+    #link_togo = "https:" + medicament_link
+
+    #medicament_page = get_html(link_togo)
+
+    #_list = parse_(medicament_page)
+
+    mapping = {
+        'page': medicament_link
+    }
+       
+    body = render("view", mapping)
+    return body
+
+            
+    #link_togo = "https:" + medicament_link
+    #здесь нужна функция для захода на страницу препарата
+   # pharm_group = parse_pharm_group(get_html(link_togo))
+
+    #is_homeopahty = ishomeopathy(pharm_group)
+    #if is_homeopathy == True:
+        #Здесь нужна функция, которая вместо принта будет выводить шаблон страницы с предупреждением о том, что препарат гомеопатический
+     #   print('Это гомеопатический препарат. Следовательно, у него не может быть доказанной клинической эффективности')
+   # find_trials
+    # Сейчас функция parse выдаёт список словарей [{'ключ': 'А', 'значение: '//www.rlsnet.ru/tn_alf_letter_c0.htm'}]
+    # Далее необходимо заходить на нужную страницу и добираться до инфы о препарате. 
+    # Парсить инфу о фарм. группе и клинических исследованиях.
  #   page = html.parse(urlopen(link_togo))  
   #  root = page.getroot()
    # tree = etree.ElementTree(root)
@@ -69,9 +139,3 @@ def get_clinical_research(medicament):
      #   d = {'key': e.text, 'value': e.attrib.get("href")} 
       #  children.append(d)
     
-    mapping = {
-            'page': link_togo
-        }
-   
-    body = render("view", mapping)
-    return body

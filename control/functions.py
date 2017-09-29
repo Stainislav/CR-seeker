@@ -52,16 +52,22 @@ def parse(html):
     return links
 
 def parse_pharm_group(html):
-    #soup = BeautifulSoup(html, "html.parser")
-    #pharm_group = soup.find('какой-то тег')
-    #return pharm_group
-    pass
+    soup = BeautifulSoup(html, "html.parser")
+    pharm_group = soup.find('div', class_="drug__content")
+    name_of_pharm = pharm_group.find('a', class_="drug__link drug__link--article")
+    return name_of_pharm.text
 
 def get_active_substance():
     pass
 
-def is_homeopathy():
-    pass
+def is_homeopathy(pharm_group):
+    homeopathy = 'ГОМЕОПАТ'
+    result = re.findall(homeopathy, pharm_group.upper())    
+
+    if result:
+        return True
+    else: 
+        return False    
 
 def parse_medicament(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -103,15 +109,20 @@ def get_clinical_research(medicament):
         body = choose_medicament(medicament_link)
         return body       
     
-    # Далее переходим на страницу препарата и парсим уже её по фарм-группе, затем по странице и действующему веществу
-    #link_togo = "https:" + medicament_link
+    # Go to the medicament page
+    link_togo = "https:" + medicament_link[0]
+   
+    medicament_page = get_html(link_togo)
+    
+    pharm_group = parse_pharm_group(medicament_page)
 
-    #medicament_page = get_html(link_togo)
+    if is_homeopathy(pharm_group) == True:
+        print("Алярма! Гомеопатия!")
 
-    #_list = parse_(medicament_page)
+    # active_substance = get_active_substance(medicament_page)
 
     mapping = {
-        'page': medicament_link
+        'page': medicament_page
     }
        
     body = render("view", mapping)

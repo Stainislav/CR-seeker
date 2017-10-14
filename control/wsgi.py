@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from cgi import parse_qs, escape
-
 from functions import index, get_clinical_research
 
 def application(environ, start_response):
@@ -14,7 +13,8 @@ def application(environ, start_response):
     clicked_id = dictionary.get('clicked_id', [''])[0]
     comments_to_delete = dictionary.get('comments_to_delete', [''])[0]     
     medicament = dictionary.get('medicament',[''])[0]
-
+    medicament  = escape(medicament)
+    
     response_body =''
        
     if path == '/':
@@ -22,14 +22,13 @@ def application(environ, start_response):
                
     if path == '/index':
         response_body = get_clinical_research(medicament)
-    
+        
     status = '200 OK'
 
     headers = [
         ('Content-Type', 'text/html'),
         ('Content-Length', str(len(response_body)))
     ]
-
+    
     start_response(status, headers)
     return [response_body.encode("utf-8")]
-

@@ -3,13 +3,13 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>view</title>
+        <title>choice</title>
     </head>
     <body>
         <p>
             <a href="/">Главная</a>
         </p>
-                <!--id="comment_list"-->       
+                <!--id="a list for choice"-->       
                 %(page)s         
     </body>
 </html>

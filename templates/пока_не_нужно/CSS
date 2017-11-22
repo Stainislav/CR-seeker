@@ -1,0 +1,49 @@
+<style> 
+           .center {
+            width: 1000px; /* Ширина элемента в пикселах */
+            padding: 10px; /* Поля вокруг текста */
+            margin: auto; /* Выравниваем по центру */
+            margin-top: 30px;
+            /*background: #fc0; /* Цвет фона */
+           }
+/*
+           .main_text {
+            width: 1000px; /* Ширина элемента в пикселах */
+            /*padding: 10px; /* Поля вокруг текста */
+            /*margin: auto; /* Выравниваем по центру */
+            /*margin-top: 10px;
+           }*/
+           .welcome {
+            width: 1000px; /* Ширина элемента в пикселах */
+            padding: 10px; /* Поля вокруг текста */
+            margin: auto; /* Выравниваем по центру */
+            margin-top: 10px;
+           }
+           .result {
+            width: 1000px; /* Ширина элемента в пикселах */
+            padding: 10px; /* Поля вокруг текста */
+            margin: auto; /* Выравниваем по центру */
+            margin-top: 20px;
+            }
+            .bottom {
+            
+            width: 1000px; /* Ширина элемента в пикселах */
+            height: 100px;
+            padding: 10px; /* Поля вокруг текста */
+            margin: auto; /* Выравниваем по центру */
+            margin-top: 10px;
+            }
+           h3 {
+            font-family: serif; /* Гарнитура текста */  
+           }
+ 
+        /* body {
+            background-color: maroon;
+            /*
+            background-image: url("https://photos-1.dropbox.com/t/2/AADg7uFzUrHjkbTj6ai0zUcQUS8vcGMwcrmJ4lT3fohB5w/12/25848173/jpeg/32x32/1/_/1/2/trials.jpg/EMjTuhMYgZACIAIoAg/v95ZUSlS-Fkt0yW71MZ_4s9B04Is9bAUPBxjNvt6GLg?size=1280x960&size_mode=3");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            */          
+           }   
+        </style>

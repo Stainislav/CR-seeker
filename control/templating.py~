@@ -4,14 +4,17 @@
 import sys, os
 from string import Template
 
+#sys.path.append('/home/Demiurge/CR-seeker/control')
+
+
 def render_string(string, dictionary):
     result = string % dictionary
     return result
 
 def render(templatename, mapping):
 
-   # direction = '/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/'
-    direction = '/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/bootstrap-4.0.0-alpha.6/docs/examples/cover/'     
+    direction = '/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/'
+         
     tpath = direction + templatename
     h = open(tpath, 'r')
     template = h.read()

@@ -5,6 +5,9 @@ from cgi import parse_qs, escape
 from functions import index
 from controller import get_clinical_research
 
+#import sys
+#sys.path.append('/home/Demiurge/CR-seeker/control')
+
 
 def application(environ, start_response):
     
@@ -13,6 +16,9 @@ def application(environ, start_response):
       
     medicament = dictionary.get('medicament',[''])[0]
     medicament  = escape(medicament)
+    
+    # Delete spaces in the end of the medicament name.
+    medicament = medicament.rstrip()
         
     response_body =''
     status = ''

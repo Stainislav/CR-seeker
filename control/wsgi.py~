@@ -13,6 +13,9 @@ def application(environ, start_response):
       
     medicament = dictionary.get('medicament',[''])[0]
     medicament  = escape(medicament)
+    
+    # Delete spaces in the end of the medicament name.
+    medicament = medicament.rstrip()
         
     response_body =''
     status = ''

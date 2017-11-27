@@ -10,10 +10,12 @@ from urllib.request import urlopen
 
 # The Russian Medicament Registry (RMR).
 BASE_URL = 'https://www.rlsnet.ru/tn_alf_letter_c0.htm'
-
+default_msg = 'Данный препарат отсутствует в регистре лекарственных \
+                   средств России. Попробуйте продолжить поиск, изменив название.'
+HTTPS = 'https:'    
 
 def index():
-    variable = "Hello"
+    variable = " "
     mapping = {
         'page': variable
     }
@@ -26,21 +28,39 @@ def get_html(url):
     return response.read()
 
 
-def error(search_error):
-    
-    default_msg = 'Данный препарат отсутствует в регистре лекарственных средств России. Попробуйте продолжить поиск, изменив название.'
-    
-    error = ''
-    if len(search_error) < 1:
-        error = default_msg
-    
+# Find a link for transition to the page with a particular letter.
+def get_first_letter_url(alphabet_list, medicament):
+
+    url = ''
+     
+    first_letter = medicament[0].upper()
+
+    for i in alphabet_list:
+        if first_letter == i['key']:
+            url = i['value']
+
+    if len(url) >= 1:
+        url = HTTPS + url
+        
+    return url
+
+
+def error(search_error=default_msg):
+        
     mapping = {
-        'page': error    
+        'page': search_error    
     }
 
     body = render('index', mapping)
         
     return body
+
+
+def check_input(item):
+    if len(item) < 1:
+        return False
+    else: 
+        return True
 
 
 def choose_medicament(medicament_list):
@@ -96,8 +116,16 @@ def is_homeopathy(pharm_group):
     else: 
         return False    
 
+def get_medicament_list(url):
+
+    medicament_html = get_html(url)
+    medicament_list = parse_medicament(medicament_html)
+    
+    return medicament_list    
+
 
 def parse_medicament(html):
+    
     soup = BeautifulSoup(html, "html.parser")
     medicament = soup.find('div', class_='tn_alf_list')
     
@@ -111,6 +139,21 @@ def parse_medicament(html):
     return links
 
 
+def find_medicament_matches(medicament_list, medicament):
+
+    medicament_link = []
+
+    result = ''
+    
+    # Find the matches in the medicament list.
+    for i in medicament_list:
+        result = re.findall(medicament.upper(), i['key'].upper())
+        if result:
+            d = {'key': i['key'], 'value': i['value']}
+            medicament_link.append(d)
+
+    return medicament_link
+    
 def get_medicament_name():
     pass
 

@@ -2,29 +2,215 @@
 
 <html>
     <head>
-        <meta charset="utf-8">
         <title>index</title>
-         <style>
-           .center {
-            width: 200px; /* Ширина элемента в пикселах */
-            padding: 10px; /* Поля вокруг текста */
-            margin: auto; /* Выравниваем по центру */
-            /*background: #fc0; /* Цвет фона */
-           }
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <style>
+            body {
+             background: #000000 url("https://photos-6.dropbox.com/t/2/AAAlKTxbB8QThgOOf1bubCS5P2lEDUH7L4f2dFGTY5omHA/12/25848173/jpeg/32x32/1/_/1/2/white_shine.jpg/EMjTuhMY3KYCIAIoAg/pTjAUEFU6WQCloZEvkPqH5bl39WFEAyTBkphqat6Wnk?size=1280x960&size_mode=3") fixed top left no-repeat;        
+             -webkit-background-size:100% 100%; /* Safari 3+, Chrome */  
+             background-size: 100% 100%;
+            }
+
+            .container-fluid {
+             padding-top: 50px; 
+             height: 100vh;
+             width: 100vw;
+             text-align: center;
+            }
+            .form {
+             padding-top: 20px;
+            }
+            .form-control {
+             display: inline-block;
+            }
+            .footer {
+             text-align: center;
+             padding-top: 300px;
+            }
+            .content {
+             padding-top: 20px;
+            }
+            .button {
+             padding-left: 10px;
+            }
         </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
     </head>
-<body>
-    <form method="get" action="index">
-    <div class="center">
-        <p>            
-            <input name="medicament" placeholder="Название препарата" type="text"/>
-        </p>  
-        <p>
-            <input type="submit" value="Отправить">
-        </p>
-        <img src="/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/view_html.jpg" alt="альтернативный текст">
-    </div>
-   </form>
-</body>
+    <body>
+            <div class="container-fluid">
+                
+                <h1 class="font-italic">Поиск информации о клинических исследованиях</h1>
+                <br>
+                <div class="form">
+
+                    <form method="get" action="index" id="needs-validation" novalidate>
+
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="input-group">
+                                <input type="text" name="medicament" class="form-control" placeholder="Название препарата" required>
+                                <div class="button">
+                                    <button class="btn btn-dark" type="submit">Найти</button>
+                                </div>                            
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="invalid-feedback">
+                                Введите название препарата.
+                            </div>
+                    </form>
+                <br>
+                </div>
+        
+                <div class="content">       
+                    %(page)s
+                </div>
+           
+                <div class="footer">
+                    <h6>
+                        &#169; Copyright: Станислав Николенко
+                    </h6>        
+                </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+     
+    <script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+
+  window.addEventListener('load', function() {
+    var form = document.getElementById('needs-validation');
+    form.addEventListener('submit', function(event) {
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  }, false);
+})();
+</script>
+
+
+            </div>
+    </body>
 </html>
 
+<!--
+
+
+
+            <form class="container" id="needs-validation" novalidate>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="validationCustom01">First name</label>
+                        <input type="text" class="form-control" id="validationCustom01" placeholder="First name" value="Mark" required>
+                        <div class="invalid-feedback">
+                            Please provide a valid city.
+                        </div>
+                    </div>
+                </div>
+            <button class="btn btn-primary" type="submit">Submit form</button>
+            </form>
+
+
+
+
+https://photos-3.dropbox.com/t/2/AADXb29JVkT1Eqz6xj6mqn-V4kfSfKqHfereJiC9Q5-ClA/12/25848173/jpeg/32x32/1/_/1/2/big_white_board.jpeg/EMjTuhMY06YCIAIoAg/zdSVZLdmqV9ACIV6ZwYgb52W0OUuAwGPGBo9rH3fjD0?size=1280x960&size_mode=3
+
+ background: #000000 url("https://photos-3.dropbox.com/t/2/AADXb29JVkT1Eqz6xj6mqn-V4kfSfKqHfereJiC9Q5-ClA/12/25848173/jpeg/32x32/1/_/1/2/big_white_board.jpeg/EMjTuhMY06YCIAIoAg/zdSVZLdmqV9ACIV6ZwYgb52W0OUuAwGPGBo9rH3fjD0?size=1280x960&size_mode=3") fixed top left no-repeat;
+
+                <div class="row">
+                    <h3>
+                        Чтобы найти сведения о клинических исследованиях 
+                        по конкретному препарату введите его название в поле ниже и нажмите "Enter".
+                    </h3>
+                </div>
+
+background: #000000 url("https://photos-4.dropbox.com/t/2/AADcZryT_mxErK0f_DjOVJ9M8IrGGG0U4UR-qCxc7LC9aw/12/25848173/jpeg/32x32/1/_/1/2/pills.jpg/EMjTuhMY8KUCIAIoAg/jacGRqURxJ7GY_WWxkgrO7fmChhWVwKkT8tldTqZU98?size=1280x960&size_mode=3"
+) fixed top left no-repeat;
+
+
+
+
+<div class="col-lg-3">     
+                        <input name="medicament" type="text" class="form-control" placeholder="Название препарата">
+                        </div>
+                        <br>
+                        <button class="btn btn-primary" type="submit">Отправить</button> 
+background: #000000 url("https://photos-3.dropbox.com/t/2/AAARIVqKojk1xgRFSivDlb7bOE2Q-BsFZtvjZdyyC50pwQ/12/25848173/jpeg/32x32/1/_/1/2/some_tablets.jpg/EMjTuhMY6qUCIAIoAg/Bx3XuKifB44FZnvLWaKa_P1ikpH6xpO3zKyYyy4eqUg?size=1280x960&size_mode=3"
+) fixed top left no-repeat;
+
+
+
+
+background: #000000 url("https://photos-3.dropbox.com/t/2/AACBiqHL_5fNejarHkr33ZrC24v0G2x3FHJJQMn9bQf3TA/12/25848173/jpeg/32x32/1/_/1/2/black_board.jpg/EMjTuhMY4aUCIAIoAg/Sa2ZCWx8f5QTfYSuNqkTsdq7IT2nxVnGOzghx1wAx3o?size=1280x960&size_mode=3"
+) fixed top left no-repeat;
+
+ background: #000000 url("https://photos-6.dropbox.com/t/2/AADxseRcOhjiH_JAKWt1DLuEzV7t0JoQZUO_U3F2a7mr3w/12/25848173/jpeg/32x32/1/_/1/2/tablets.jpg/EMjTuhMYxKQCIAIoAg/M-D82TXZpY6bo11jnbiT4EdndAmVBTPjr1focIrR5Eg?size=1280x960&size_mode=3") fixed top left no-repeat;
+
+
+
+
+                    <form method="get" action="index">
+                            <p>            
+                                <input name="medicament" placeholder="Название препарата" type="text"/>
+                            </p>
+                            <p>
+                                <button class="btn btn-primary" type="submit">Отправить</button>
+                            </p>   
+                    </form>
+
+
+
+<img src="https://photos-6.dropbox.com/t/2/AADxseRcOhjiH_JAKWt1DLuEzV7t0JoQZUO_U3F2a7mr3w/12/25848173/jpeg/32x32/1/_/1/2/tablets.jpg/EMjTuhMYxKQCIAIoAg/M-D82TXZpY6bo11jnbiT4EdndAmVBTPjr1focIrR5Eg?size=1280x960&size_mode=3">
+
+
+
+            <div class="card" style="width: 20rem;">
+              <img class="card-img-top" src="https://photos-6.dropbox.com/t/2/AADxseRcOhjiH_JAKWt1DLuEzV7t0JoQZUO_U3F2a7mr3w/12/25848173/jpeg/32x32/1/_/1/2/tablets.jpg/EMjTuhMYxKQCIAIoAg/M-D82TXZpY6bo11jnbiT4EdndAmVBTPjr1focIrR5Eg?size=1280x960&size_mode=3" alt="Card image cap">
+
+              <div class="card-body">
+                <h4 class="card-title">Card title</h4>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div> 
+
+<img src="https://photos-5.dropbox.com/t/2/AAAtFQ2Kz2BNC3PbkhEqFxBtzITu9lJTJqLctL-Ypz1s8g/12/25848173/jpeg/32x32/3/1510102800/0/2/view.jpg/EMjTuhMYgJACIAIoAg/MZAkKfUIgzSJRKHT5YvVZFw8ftgZKsknBKWCyr8aDt4?dl=0&size=1280x960&size_mode=3" alt="Cinque Terre">
+
+
+
+
+ body {
+             /*background-color: gray !important;*/
+             background-image: url("https://photos-6.dropbox.com/t/2/AADxseRcOhjiH_JAKWt1DLuEzV7t0JoQZUO_U3F2a7mr3w/12/25848173/jpeg/32x32/1/_/1/2/tablets.jpg/EMjTuhMYxKQCIAIoAg/M-D82TXZpY6bo11jnbiT4EdndAmVBTPjr1focIrR5Eg?size=1280x960&size_mode=3");
+             background-repeat: no-repeat;
+             background-position: center;
+            }
+
+
+
+
+/*background-color: gray !important;*/
+             background-image: url("https://photos-6.dropbox.com/t/2/AADxseRcOhjiH_JAKWt1DLuEzV7t0JoQZUO_U3F2a7mr3w/12/25848173/jpeg/32x32/1/_/1/2/tablets.jpg/EMjTuhMYxKQCIAIoAg/M-D82TXZpY6bo11jnbiT4EdndAmVBTPjr1focIrR5Eg?size=1280x960&size_mode=3");
+             background-repeat: no-repeat;
+             background-position: center;
+
+
+/*/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/templates/images/tablets.jpg*/
+
+                -->

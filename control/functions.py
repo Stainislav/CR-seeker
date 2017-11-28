@@ -1,188 +1,130 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sqlite3
-import os.path
-from string import Template
-from templating import render
-from cgi import parse_qs, escape
-import lxml.html as html
-from pandas import DataFrame
 import re
+from bs4 import BeautifulSoup
+from templating import render
 
-from io import StringIO
-from lxml import etree
-
+import urllib.request
 from urllib.request import urlopen
 
-DATABASE = '/home/stanislav/Dropbox/Programming/CS50/final_project/CR-seeker.git/data/database.db'
-connection = sqlite3.connect(DATABASE)
-db = connection.cursor()
+# The Russian Medicament Registry (RMR).
+BASE_URL = 'https://www.rlsnet.ru/tn_alf_letter_c0.htm'
+default_msg = 'Данный препарат отсутствует в регистре лекарственных \
+                   средств России. Попробуйте продолжить поиск, изменив название.'
+HTTPS = 'https:'    
 
 def index():
-    mapping = {}
-    
+    variable = " "
+    mapping = {
+        'page': variable
+    }
     body = render("index", mapping)
     return body
 
 
-def get_clinical_research(medicament):
-    page = html.parse(urlopen('https://www.rlsnet.ru/tn_alf_letter_c0.htm'))
+def get_html(url):
+    response = urllib.request.urlopen(url)
+    return response.read()
 
-    e = page.getroot().\
-        find_class('search__filter')
+
+# Find a link for transition to the page with a particular letter.
+def get_first_letter_url(alphabet_list, medicament):
+
+    url = ''
+     
+    first_letter = medicament[0].upper()
+
+    for i in alphabet_list:
+        if first_letter == i['key']:
+            url = i['value']
+
+    if len(url) >= 1:
+        url = HTTPS + url
+        
+    return url
+
+
+def error(search_error=default_msg):
+        
+    mapping = {
+        'page': search_error    
+    }
+
+    body = render('index', mapping)
+        
+    return body
+
+
+def check_input(item):
+
+    if len(item) < 1:
+        return False
+    else: 
+        return True
+
+
+def parse(html):
+
+    soup = BeautifulSoup(html, "html.parser")
+    div = soup.find('div', class_='alphabet__current')    
+    
+    links = []
    
+    # Create a dictionary of links and alphabet letters.
+    for i in div.find_all('a')[0:29]:
+        d = {'key': i.text, 'value': i['href']}
+        links.append(d) 
+
+    return links
+
+
+def get_medicament_list(url):
+
+    medicament_html = get_html(url)
+    medicament_list = parse_medicament(medicament_html)
+    
+    return medicament_list    
+
+
+def parse_medicament(html):
+    
+    soup = BeautifulSoup(html, "html.parser")
+    medicament = soup.find('div', class_='tn_alf_list')
+    
     links = []
 
-    # Create a dictionary of links and alphabet letters.
-    for i in e:   
-        d = {'key': i.text_content(), 'value': i.attrib.get("href")}
-        links.append(d)
+    # Create a dictionary of medicament lists.
+    for i in medicament.find_all('a'):
+        d = {'key': i.text, 'value': i['href']}
+        links.append(d) 
     
-    link_togo = ''
+    return links
+
+
+def find_medicament_matches(medicament_list, medicament):
+
+    medicament_link = []
+
+    result = ''
     
-    # Find a link for transition to the page with particular letter.
-    for i in links:
-        if medicament[0].upper() == i['key']:
-            link_togo = i['value']     
-    link_togo = "https:" + link_togo
-    
-    page = html.parse(urlopen(link_togo))  
-    root = page.getroot()
-    tree = etree.ElementTree(root)
+    # Find the matches in the medicament list.
+    for i in medicament_list:
+        result = re.findall(medicament.upper(), i['key'].upper())
+        if result:
+            d = {'key': i['key'], 'value': i['value']}
+            medicament_link.append(d)
 
-    children = []
-    for e in tree.iter():
-        d = {'key': e.text, 'value': e.attrib.get("href")} 
-        children.append(d)
+    return medicament_link
 
-    for i in children:
-        if medicament.upper() == str(i['key']).upper():
-            link_togo = i['value']
-    
-    link_togo = "https:" + link_togo
-
-    page = html.parse(urlopen(link_togo)) 
-    root = page.getroot()
-    tree = etree.ElementTree(root)
-
-    drug = page.getroot().\
-        find_class("drug__link drug__link--article")
-    
-    drug_list = []
-
-    # Create a dictionary of links and alphabet letters.
-    for i in drug:   
-        drug_list.append(i.text_content())
-
-    answer = ''
-
-    # Check for homeopathy.
-    for i in drug_list:
-        result = re.findall(r'ГОМЕОПАТИЧЕСКОЕ', i.upper())
-        if result != None:
-            answer = "Это гомеопатическое средство.. " # Плохо, что здесь не получается отобразить последний знак строки на странице.
-                                                       #Нужно этот момент прояснить и исправить.
-
-    # get the id attributes from the page
-    children = []
-    for e in tree.iter():
-        d = {'key': e.text, 'value': e.attrib.get("id")} 
-        children.append(d)
-       
-    mapping = {
-            'page': answer
-        }
    
-    #<div class="alphabet__raspor" id="c0e1"></div>
-    #<div id="dejstvuyushhee-veshhestvo"></div>
-    #<div id="farmakologicheskaya-gruppa"></div>
-    body = render("view", mapping)
-    return body
-'''
+def parse_clinical_trials(html):
 
-
-    #'tn_alf_list'
-    e = page.getroot().\
-        find_class('alphabet__delimiter')
-
-    # Create a dictionary of links.
-    for i in e:
-        d = {'key': i.text_content(), 'value': i.attrib.get("href")}
-        links.append(d)
-
-    # Find a link for transition.
-    for i in links:
-        #print(medicament.upper())
-        if medicament.upper() == i['key'].upper():
-            link_togo = i['value']
-
-
-
-
-
-
-print(link_togo)
-    page = html.parse(urlopen(link_togo))  
- 
-    #'tn_alf_list'
-    e = page.getroot().\
-        find_class('tn_alf_list')
-
-    # Create a dictionary of links.
-    for i in e:   
-        d = {'key': i.text_content(), 'value': i.attrib.get("href")}
-        links.append(d)
+    soup = BeautifulSoup(html, "html.parser")
     
-    med = medicament.upper()
-    print(med)
-    # Find a link for transition.
-    for i in links:
-        if medicament.upper() == i['key'].upper():
-            link_togo = i['value']
-    print(link_togo)
+    clinical_html = soup.find('div', class_='main__content')
+    clinical_key = re.search("клинич+..... (?=исследов)", str(clinical_html), flags=re.IGNORECASE)
+        
+    # return None if there is no matches    
+    return clinical_key
 
-
-
-broken_html = "https://www.rlsnet.ru/tn_alf_letter_c0.htm"
-
-    parser = etree.HTMLParser()
-    tree   = etree.parse(StringIO(broken_html), parser)
-
-    page = etree.tostring(tree.getroot(),
-                            pretty_print=True, method="html")
-
- #myString = "https://www.rlsnet.ru/tn_alf_letter_c0.htm"
-    #page = etree.parse(StringIO(myString))
-#"<html><head><title>test<body><h1>page title</h3>"
-'''
-'''
-    e = page.getroot().\
-        find_class('search__alphabet').\
-        pop()
-
-
-
-    url_list = ''
-
-    for i in e:
-        url_list = url_list + i
-    print(url_list)
-
-    #page = page.getroot()
-    #page = page.text_content()
-    
-    #t = e.getchildren().pop()
-    #t = t.text_content()
-    
-    alphabet = ''
-       
-    for i in e:
-        alphabet =  alphabet + i.text_content()
-   
-    mapping = {
-            'page': alphabet
-        }
-
-    #"html/aironepage/HTML/index.html"
-  '''
